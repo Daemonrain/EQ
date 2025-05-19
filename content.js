@@ -6,35 +6,38 @@ let source;
 
 // Function to initialize audio processing
 function initializeAudio() {
-  if (audioContext) {
+  // Проверка инициализации (должна быть объявлена вне функции)
+  if (window.audioContext && window.gainNode) {
     console.log('Audio context already initialized.');
     return;
   }
 
-  audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  gainNode = audioContext.createGain();
+  // Создание аудиоконтекста и GainNode
+  window.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  window.gainNode = window.audioContext.createGain();
+  window.gainNode.connect(window.audioContext.destination);
 
-  // Request access to the audio stream from the current tab
-  chrome.tabCapture.capture({
-    video: false,
-    audio: true
-  }, (stream) => {
-    if (!stream) {
-      console.error('Error capturing tab audio:', chrome.runtime.lastError);
-      return;
+  console.log('Audio context and GainNode initialized.');
+
+  // Поиск аудио/видео элементов на странице
+  const mediaElements = document.querySelectorAll('audio, video');
+  mediaElements.forEach(element => {
+    try {
+      // Проверка, не подключен ли элемент уже к другому источнику
+      if (!element._audioSource) {
+        const source = window.audioContext.createMediaElementSource(element);
+        source.connect(window.gainNode);
+        element._audioSource = source; // Помечаем элемент как обработанный
+        console.log('Audio source connected:', element);
+      }
+    } catch (error) {
+      console.error('Error creating MediaElementAudioSourceNode:', error);
     }
-
-    // Create a MediaStreamAudioSourceNode from the captured stream
-    source = audioContext.createMediaStreamSource(stream);
-
-    // Connect the source to the gain node
-    source.connect(gainNode);
-
-    // Connect the gain node to the audio context destination (speakers)
-    gainNode.connect(audioContext.destination);
-
-    console.log('Audio stream captured and connected.');
   });
+
+  if (mediaElements.length === 0) {
+    console.warn('No audio or video elements found on this page.');
+  }
 }
 
 // Initialize audio processing when the script is injected
