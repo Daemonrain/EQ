@@ -1,0 +1,37 @@
+body {
+    width: 300px;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+    background: #1e1e1e;
+    color: white;
+  }
+  
+  .eq-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .eq-bands {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .eq-bands input[type="range"] {
+    width: 100%;
+  }
+  
+  #visualizer {
+    background: #2d2d2d;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+  
+  button {
+    background: #4CAF50;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+  }

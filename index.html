@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Ears EQ</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="eq-container">
+    <h1>Ears EQ</h1>
+    <div class="eq-controls">
+      <div class="eq-bands">
+        <label>32 Hz <input type="range" min="-12" max="12" value="0" class="eq-band" data-freq="32"></label>
+        <label>64 Hz <input type="range" min="-12" max="12" value="0" class="eq-band" data-freq="64"></label>
+        <label>125 Hz <input type="range" min="-12" max="12" value="0" class="eq-band" data-freq="125"></label>
+        <!-- Добавьте остальные полосы по аналогии -->
+      </div>
+      <canvas id="visualizer" width="300" height="150"></canvas>
+    </div>
+    <button id="reset-btn">Reset</button>
+  </div>
+  <script src="index.js"></script>
+</body>
+</html>

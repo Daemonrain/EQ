@@ -1,0 +1,29 @@
+{
+  "manifest_version": 2,
+  "name": "fire EQ",
+  "version": "1.0",
+  "description": "Графический эквалайзер с визуализацией аудио",
+  "icons": {
+    "32": "icons/test-img-32.png",
+    "48": "icons/test-img-48.png"
+  },
+  "browser_action": {
+    "default_icon": "icons/test-img-48.png",
+    "default_title": "Ears EQ",
+    "default_popup": "index.html"
+  },
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    "index.html"
+  ]
+}
