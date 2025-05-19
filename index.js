@@ -4,16 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('visualizer');
     const ctx = canvas.getContext('2d');
     let source;
-  
-    // Инициализация аудиопотока
-    navigator.mediaDevices.getUserMedia({ audio: true, video: false })
-      .then(stream => {
-        source = audioContext.createMediaStreamSource(stream);
-        source.connect(analyser);
-        analyser.connect(audioContext.destination);
-        visualize();
-      })
-      .catch(err => console.error("Ошибка доступа к аудио:", err));
+
+    const volumeSlider = document.getElementById('volumeSlider');
   
     // Визуализация аудио
     function visualize() {
@@ -38,6 +30,15 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('reset-btn').addEventListener('click', () => {
       document.querySelectorAll('.eq-band').forEach(slider => {
         slider.value = 0;
+      });
+    });
+
+    // Обработчик изменения значения ползунка громкости
+    volumeSlider.addEventListener('input', (event) => {
+      const volume = parseFloat(event.target.value);
+      // Отправляем сообщение в content.js для установки громкости
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        chrome.tabs.sendMessage(tabs[0].id, { command: "setVolume", volume: volume });
       });
     });
   });
